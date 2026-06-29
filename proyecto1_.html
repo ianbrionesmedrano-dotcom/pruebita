@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Boda - Invitación Elegante de Lujo</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&family=WindSong:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nixie+One&family=Tangerine:wght@400;700&family=WindSong:wght@400;500&display=swap" rel="stylesheet">
+
+    
+    <style>
+        /* --- CONFIGURACIÓN DE VARIABLES --- */
+        :root {
+            --color-primario: #0F2042;   /* Azul Marino Premium */
+            --color-texto: #111111;      /* Negro formal */
+            --color-mutado: #4A5568;     /* Gris oscuro para subtítulos */
+            --fuente-titulo: 'Cormorant Garamond', serif;
+            --fuente-elegante: 'Cormorant Garamond', serif;
+            --fuente-cuerpo: 'Montserrat', sans-serif;
+
+            /* Imagen del sobre */
+            --imagen-sobre: url(img/sobre.png);
+            
+            /* Estilo común de vidrio esmerilado */
+            --fondo-vidrio: rgba(255, 255, 255, 0.5);
+            --borde-vidrio: 1px solid rgba(15, 32, 66, 0.15);
+            --blur-vidrio: blur(12px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--fuente-cuerpo);
+            color: var(--color-texto);
+            background-color: #000000;
+            overflow-x: hidden;
+        }
+        /*----fondo 1----*/
+                .bloque-vidrio{
+            width:calc(100% + 40px);
+            margin-left:-20px;
+            margin-right:-20px;
+
+            padding:70px 0;
+
+            background:rgba(6, 20, 47, 0.501);
+            backdrop-filter:blur(8px);
+            -webkit-backdrop-filter:blur(18px);
+
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        }
+
+        /* --- REPRODUCTOR DE MÚSICA FLOTANTE --- */
+        #musica-contenedor {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 10000;
+        }
+        .btn-musica {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: var(--blur-vidrio);
+            border: 1px solid var(--color-primario);
+            color: var(--color-primario);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .btn-musica:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+
+        /* --- CONTENEDOR DE VIDEOS EN DOBLE CAPA --- */
+        .contenedor-video-fijo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            background-color: #000; 
+        }
+
+        .video-capa {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out; 
+        }
+
+        .video-capa.visible {
+            opacity: 1;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        #resto-pagina {
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out; 
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- ESTRUCTURA BASE DE LOS BLOQUES --- */
+        .bloque {
+            position: relative;
+            padding: 60px 20px;
+            min-height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* --- ANIMACIÓN SCROLL --- */
+        .animar-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.610, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.610, 0.355, 1);
+        }
+
+        .animar-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- ANIMACIONES EXCLUSIVAS TEXTOS DE ENTRADA --- */
+        .revelar-entrada {
+            opacity: 0;
+            font-family: "Tangerine", cursive;
+            transform: translateY(25px);
+        }
+        
+        .visible .revelar-entrada.revelar-1 {
+            animation: entradaTexto 1.2s cubic-bezier(0.215, 0.610, 0.355, 1) forwards 0.2s;
+        }
+        .visible .revelar-entrada.revelar-2 {
+            animation: entradaTexto 1.4s cubic-bezier(0.215, 0.610, 0.355, 1) forwards 0.5s;
+        }
+        .visible .revelar-entrada.revelar-3 {
+            animation: entradaTexto 1.6s cubic-bezier(0.215, 0.610, 0.355, 1) forwards 0.9s;
+        }
+        .visible .revelar-entrada.revelar-4 {
+            animation: entradaTexto 1.8s cubic-bezier(0.215, 0.610, 0.355, 1) forwards 1.2s;
+        }
+
+        @keyframes entradaTexto {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1, h2 {
+            font-family: var(--fuente-titulo);
+            letter-spacing: 4px;
+            font-weight: 400;
+            color: var(--color-texto);
+        }
+
+        h1 {
+            font-size: clamp(3.2rem, 8vw, 5rem);
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 2.6rem);
+            margin-bottom: 20px;
+            color: var(--color-primario);
+        }
+        
+        .mensaje-elegante {
+            font-family: "Tangerine", cursive;
+            font-style: italic;
+            font-size: clamp(1.4rem, 3.5vw, 1.8rem);
+            width:calc(100% - 40px);
+            line-height: 1.6;
+            color: #d7d7d7;
+        }
+
+        .mensaje-elegante2 {
+            font-family: "Tangerine", cursive;
+            font-style: italic;
+            font-size: clamp(1.4rem, 3.5vw, 1.8rem);
+            width:calc(100% - 40px);
+            line-height: 1.6;
+            color: #222453;
+        }
+
+        .icono-dorado {
+            color: var(--color-primario);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .btn-elegante {
+            font-family: var(--fuente-titulo);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: var(--blur-vidrio);
+            border: 1px solid var(--color-primario);
+            color: var(--color-primario);
+            padding: 14px 40px;
+            font-size: 0.95rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 20px;
+            border-radius: 0px; 
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-elegante:hover {
+            background: var(--color-primario);
+            color: white;
+            box-shadow: 0 10px 25px rgba(15, 32, 66, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* --- SOBRE --- */
+        #bloque-sobre {
+            position: fixed;
+            top: 0; left: 0; 
+            width: 100vw; height: 100vh;
+            background-image: url(img/fondo.jpg); 
+            background-size: cover;
+            background-position: center;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sobre-interfaz {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .sobre-header {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sobre-header h3 {
+                font-family: "WindSong", cursive;
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            font-weight: 400;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+            color: #000000;
+            text-shadow: 0 0 10px rgba(255,255,255,0.6); 
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: escritura-texto 2s steps(20) forwards;
+        }
+
+        .sobre-header p {
+            font-family: var(--fuente-cuerpo);
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #000000;
+            text-shadow: 0 0 8px rgba(255,255,255,0.6);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: aparecer-suave 1.2s ease forwards;
+            animation-delay: 2s;
+        }
+
+        .sobre-wrapper {
+            position: relative;
+            width: min(450px, 85vw);   
+            aspect-ratio: 4 / 3;       
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            border-radius: 4px;
+            overflow: hidden;
+            opacity: 0;
+            transform: scale(0.95);
+            animation: sobre-entrada 1.2s ease forwards;
+            animation-delay: 2s;
+        }
+
+        .sobre {
+            width: 100%;
+            height: 100%;
+            background-image: var(--imagen-sobre); 
+            background-size: cover;       
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .sobre-footer {
+            text-align: center;
+            max-width: 550px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sobre-footer span {
+            font-family: "Tangerine", cursive;
+            font-style: italic;
+            font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+            color: #000000;
+            text-shadow: 0 0 10px rgba(255,255,255,0.7);
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+        }
+
+        .sobre-footer .linea-1 { animation: escritura-texto 2s steps(30) forwards; animation-delay: 3.5s; }
+        .sobre-footer .linea-2 { animation: escritura-texto 2s steps(30) forwards; animation-delay: 5.5s; }
+        .sobre-footer .linea-3 { animation: escritura-texto 2s steps(30) forwards; animation-delay: 7.5s; }
+
+        @keyframes escritura-texto { from { width: 0; } to { width: 100%; } }
+        @keyframes aparecer-suave { to { opacity: 1; transform: translateY(0); } }
+        @keyframes sobre-entrada { to { opacity: 1; transform: scale(1); } }
+
+        #pantalla-blanca {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #ffffff; opacity: 0; pointer-events: none; 
+            z-index: 100000; transition: opacity 0.6s ease-in-out;
+        }
+
+        /* --- CONTADOR MINIMALISTA --- */
+        .cuenta-regresiva {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 35px;
+            padding: 10px 0;
+        }
+        .tiempo-unidad {
+            background: transparent;
+            border: none;
+            backdrop-filter: none;
+            padding: 0 25px;
+            min-width: auto;
+            box-shadow: none;
+            position: relative;
+        }
+        .tiempo-unidad:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 15%;
+            height: 70%;
+            width: 1px;
+            background: rgba(15, 32, 66, 0.25);
+        }
+        .tiempo-numero {
+            font-family: var(--fuente-titulo);
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 300;
+            color: var(--color-primario);
+            display: block;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .tiempo-etiqueta {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--color-mutado);
+            font-weight: 500;
+        }
+
+        /* ─── FOTO PRINCIPAL LIMPIA SIN DEGRADADO ─── */
+        .foto-unir-limpia {
+            width: 100%; max-width: 600px; height: 420px;
+            object-fit: cover; border-radius: 0px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15); /* Sombra elegante para enmarcarla */
+        }
+        
+        .galeria-vertical {
+            display: flex; flex-direction: column; gap: 30px; width: 100%; max-width: 450px;
+        }
+        
+        .galeria-vertical img {
+            width: 100%; height: 520px; object-fit: cover; border-radius: 0px;
+            
+        }
+
+        /* CUADRO MARGEN PADRES */
+        .cuadro-padres {
+            border: var(--borde-vidrio);
+            padding: 50px 40px;
+            background: var(--fondo-vidrio);
+            backdrop-filter: var(--blur-vidrio);
+            border-radius: 0px;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.04);
+        }
+        .columna-padres h3 {
+            font-family: var(--fuente-cuerpo);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-primario);
+            margin-bottom: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .columna-padres p {
+            font-family: var(--fuente-elegante);
+            font-size: 1.6rem;
+            margin: 4px 0;
+            color: var(--color-texto);
+        }
+
+        /* MODAL MAPAS */
+        .modal-mapa {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.2); backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 500000; opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .modal-mapa.activo { opacity: 1; pointer-events: auto; }
+        .modal-contenido {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: var(--blur-vidrio);
+            border: var(--borde-vidrio);
+            padding: 30px; border-radius: 0px; 
+            width: 90%; max-width: 580px; position: relative;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+        .btn-cerrar {
+            position: absolute; top: -15px; right: -15px;
+            background: var(--color-primario); color: white; border: none;
+            width: 35px; height: 35px; cursor: pointer; font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* LÍNEA DEL TIEMPO */
+        .timeline {
+            position: relative; max-width: 550px; margin: 40px auto 0 auto; padding-left: 40px;
+        }
+
+
+        .cuadro-itinerario{
+            max-width:700px;
+            width:calc(100% + 40px);
+            padding:55px 45px;
+            border-radius:0px;
+
+            background:rgba(6,20,47,.45);
+            backdrop-filter:blur(18px);
+            -webkit-backdrop-filter:blur(18px);
+
+            border:1px solid rgba(255,255,255,.12);
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,.30),
+                inset 0 1px 0 rgba(255,255,255,.08);
+        }
+
+
+
+
+
+        .timeline::before{
+            content:'';
+            position:absolute;
+            left:8px;
+            top:0;
+            bottom:0;
+            width:2px;
+            background:rgba(255,255,255,.45);
+        }
+        .timeline-item { position: relative; margin-bottom: 45px; text-align: left; }
+        .timeline-dot{
+            position:absolute;
+            left:-41px;
+            top:2px;
+            width:22px;
+            height:22px;
+            border-radius:50%;
+
+            background:rgba(255,255,255,.20);
+            backdrop-filter:blur(10px);
+
+            border:1px solid rgba(255,255,255,.45);
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .timeline-dot i{
+            color:white;
+            font-size:.7rem;
+        }
+        .timeline-hora {
+            font-family: var(--fuente-cuerpo); color: var(--color-primario);
+            font-size: 0.75rem; font-weight: 600; margin-bottom: 4px; letter-spacing: 2px;
+        }
+        .timeline-titulo { font-family: var(--fuente-elegante); font-size: 1.6rem; font-weight: 400; }
+
+        /* DATOS BANCO */
+        .datos-banco {
+            margin-top: 30px; padding: 25px; border-top: 1px dashed rgba(15, 32, 66, 0.25);
+            max-width: 480px; width: 100%;
+        }
+        .cuenta-num {
+            font-family: var(--fuente-titulo); letter-spacing: 1px;
+            font-size: 1.3rem; margin-top: 10px; color: var(--color-primario); line-height: 1.6;
+        }
+
+        /* FORMULARIO RSVP */
+        .formulario-rsvp {
+            background: var(--fondo-vidrio); backdrop-filter: var(--blur-vidrio); border: var(--borde-vidrio);
+            padding: 45px 35px; border-radius: 0px; box-shadow: 0 20px 50px rgba(0,0,0,0.03);
+            width: 100%; max-width: 600px; text-align: left;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 8px; font-weight: 600; color: var(--color-primario);
+        }
+        .form-control {
+            width: 100%; padding: 14px; background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(15, 32, 66, 0.15); border-radius: 0px;
+            font-family: var(--fuente-cuerpo); font-size: 0.95rem; color: var(--color-texto);
+            outline: none; transition: all 0.3s ease;
+        }
+        .form-control:focus { 
+            border-color: var(--color-primario); background: rgba(255, 255, 255, 0.8);
+        }
+        .fila-invitados { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 15px; }
+
+        /* ─── NUEVA PALETA DE VESTUARIO ESTÉTICA 3D ─── */
+        .tipo-vestimenta {
+            font-family: var(--fuente-titulo); font-size: 2.2rem;
+            letter-spacing: 3px; margin-top: 10px; color: var(--color-primario);
+        }
+        .contenedor-paleta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 35px;
+            flex-wrap: wrap;
+        }
+        .item-color {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .circulo-3d {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            /* Efecto 3D a través de sombras suaves concéntricas e internas */
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.15), 
+                inset 0 -4px 10px rgba(0, 0, 0, 0.2), 
+                inset 0 4px 10px rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            /* Animación fluida de tamaño */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+        /* Efecto al pasar el mouse: se hace más grande y aumenta su volumen */
+        .circulo-3d:hover {
+            transform: scale(1.18);
+            box-shadow: 
+                0 15px 25px rgba(0, 0, 0, 0.25), 
+                inset 0 -4px 12px rgba(0, 0, 0, 0.25), 
+                inset 0 4px 12px rgba(255, 255, 255, 0.5);
+        }
+        .nombre-color {
+            font-family: var(--fuente-cuerpo);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-mutado);
+            font-weight: 500;
+        }
+
+       .bloque {
+    --color-dorado: rgba(22, 17, 3, 0.75); /* Dorado con ligera transparencia para mayor finura */
+}
+
+/* 1. Adorno superior de Bruno */
+.adorno-superior {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 140px; /* Lo encogí un poco para que abrace mejor el nombre */
+    margin-bottom: 15px;
+    color: var(--color-dorado);
+    font-size: 0.8rem;
+}
+.adorno-superior::before, 
+.adorno-superior::after {
+    content: "";
+    flex: 1;
+    height: 0.5px; /* Línea ultra delgada */
+    background: var(--color-dorado);
+    margin: 0 10px;
+}
+
+/* 2. Adornos para el conector 'and' */
+.conector-contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 5px 0;
+}
+.espiral-img {
+    height: 70px; 
+    width: auto;  
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+
+    /* FILTRO MÁGICO:
+       1. brightness(0) vuelve la imagen completamente negra.
+       2. El resto de valores la tiñen matemáticamente al tono rgba(56, 45, 8) 
+       3. opacity(0.75) le da el toque exacto de transparencia que me pediste.
+    */
+    filter: brightness(0) sepia(1) hue-rotate(5deg) saturate(3.5) brightness(0.22) opacity(0.75);
+}
+
+/* Contenedor wrapper de la fecha */
+.fecha-wrapper {
+    display: inline-block; 
+    width: 100%; 
+    max-width: 320px;
+}
+
+/* 3. Líneas de la Fecha */
+.linea-fecha-superior {
+    width: 100%;
+    height: 0.5px; /* Línea ultra delgada */
+    background: var(--color-dorado);
+    margin-bottom: 8px;
+}
+.linea-fecha-inferior-contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 25px;
+    color: var(--color-dorado);
+    position: relative;
+}
+.linea-fecha-inferior-contenedor::before, 
+.linea-fecha-inferior-contenedor::after {
+    content: "";
+    flex: 1;
+    height: 0.5px; /* Línea ultra delgada */
+    background: var(--color-dorado);
+}
+
+/* 4. Efecto de flor cortada a la mitad */
+.flor-mitad {
+    font-size: 1rem;
+    line-height: 0.5; 
+    height: 6px; 
+    overflow: hidden; 
+    margin: 0 8px;
+    display: inline-block;
+}
+
+/* 5. Adorno inferior del contador (75% de ancho) */
+.adorno-contador {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 75%;
+    margin: 30px auto 0 auto;
+    color: var(--color-dorado);
+}
+.adorno-contador::before, 
+.adorno-contador::after {
+    content: "";
+    flex: 1;
+    height: 0.5px; /* Línea ultra delgada */
+    background: var(--color-dorado);
+    margin: 0 15px;
+}
+
+
+        @media (max-width: 600px) {
+            .bloque { padding: 45px 15px; }
+            .cuenta-regresiva { padding: 5px 0; }
+            .tiempo-unidad { padding: 0 12px; }
+            .cuadro-padres { padding: 35px 20px; }
+            .formulario-rsvp { padding: 30px 20px; }
+            .fila-invitados { grid-template-columns: 1fr; gap: 10px; }
+            .galeria-vertical img { height: 380px; }
+            .contenedor-paleta { gap: 20px; }
+            .circulo-3d { width: 50px; height: 50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="musica-contenedor">
+        <audio id="musica-boda" loop src="img/Edgar Alejandro- A tu lado.mp3"></audio>
+        <button class="btn-musica" onclick="controlarMusica()">
+            <i id="icono-musica" class="fas fa-music"></i>
+        </button>
+    </div>
+
+    <div id="pantalla-blanca"></div>
+
+    <!-- BLOQUE SOBRE -->
+    <section id="bloque-sobre">
+        <div class="sobre-interfaz">
+            <div class="sobre-header">
+                <h3>Bruno & Camila</h3>
+                <p>24 . Octubre . 2026</p>
+            </div>
+            <div class="sobre-wrapper" onclick="abrirSobre()">
+                <div class="sobre"></div>
+            </div>
+            <div class="sobre-footer">
+                <span class="linea-1">"Nuestra historia no estaría completa sin ti.</span>
+                <span class="linea-2">Tienes una invitación exclusiva</span>
+                <span class="linea-3">a nuestro comienzo."</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- REPRODUCTOR DE VIDEOS -->
+    <div class="contenedor-video-fijo" id="reproductor-fondo" style="display: none;">
+        <video id="vid1" class="video-capa visible" autoplay muted playsinline>
+            <source src="img/n_snegurskaya_pindown.io_1782441540.mp4" type="video/mp4">
+        </video>
+        <video id="vid2" class="video-capa" muted playsinline>
+            <source src="img/n_snegurskaya_pindown.io_1782441540.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- INVITACIÓN PRINCIPAL -->
+   <div id="resto-pagina" style="display: none;">
+
+    <section class="bloque" style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; min-height: 85vh; padding: 60px 20px 40px 20px; gap: 20px;">
+        
+        <div class="bloque-superior" style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: auto; margin-bottom: 30px;">
+            
+            <div class="nombres-boda" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                
+       
+                
+                <h1 class="revelar-entrada revelar-2" style="margin: 0;">Bruno</h1>
+                
+                <div class="conector-contenedor revelar-entrada revelar-2">
+    
+                <img src="img/decoracion flores - copia.png" alt="Espiral Izquierdo" class="espiral-img">
+                
+                <span class="conector-and" style="font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--color-primario); font-style: italic; display: block; font-family: 'WindSong', cursive;">and</span>
+                
+                <img src="img/decoracion flores.png" alt="Espiral Derecho" class="espiral-img">
+
+                 </div>
+                
+                <h1 class="revelar-entrada revelar-2" style="margin: 0;">Camila</h1>
+            </div>
+        </div>
+        
+        <div class="bloque-inferior" style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: auto; width: 100%; max-width: 400px;">
+            
+            <div class="fecha-wrapper">
+                <div class="linea-fecha-superior"></div>
+
+                <h2 class="revelar-entrada revelar-3" style="font-size: clamp(1.1rem, 3vw, 1.4rem); margin: 0; letter-spacing: 5px; font-weight: 500; color: var(--fuente-cuerpo); font-family: 'Nixie One', system-ui;">24 . OCTUBRE . 2026</h2>
+                
+                <div class="linea-fecha-inferior-contenedor">
+                    
+                </div>
+            </div>
+            
+            <div class="cuenta-regresiva revelar-entrada revelar-4" id="cuenta-regresiva">
+                <div class="tiempo-unidad">
+                    <span class="tiempo-numero" id="dias" style="font-family: 'Nixie One', system-ui;">00</span>
+                    <span class="tiempo-etiqueta" style="font-family: 'Nixie One', system-ui;">Días</span>
+                </div>
+                <div class="tiempo-unidad">
+                    <span class="tiempo-numero" id="horas" style="font-family: 'Nixie One', system-ui;">00</span>
+                    <span class="tiempo-etiqueta" style="font-family: 'Nixie One', system-ui;">Horas</span>
+                </div>
+                <div class="tiempo-unidad">
+                    <span class="tiempo-numero" id="minutos" style="font-family: 'Nixie One', system-ui;">00</span>
+                    <span class="tiempo-etiqueta" style="font-family: 'Nixie One', system-ui;">Min</span>
+                </div>
+                <div class="tiempo-unidad">
+                    <span class="tiempo-numero" id="segundos" style="font-family: 'Nixie One', system-ui;">00</span>
+                    <span class="tiempo-etiqueta" style="font-family: 'Nixie One', system-ui;">Seg</span>
+                </div>
+            </div>
+
+            <div class="adorno-contador revelar-entrada revelar-4">❤</div>
+
+        </div>
+    </section>
+</div>
+
+        <!-- PRIMERA FOTO (CORREGIDA: TOTALMENTE LIMPIA Y SIN FILTROS) -->
+        <section class="bloque animar-scroll">
+
+    <div class="bloque-vidrio">
+
+        <img class="foto-unir-limpia"
+            src="img/casados.png"
+            alt="Novios">
+
+        <p class="mensaje-elegante">
+            "El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma dirección. Hoy comenzamos el viaje más hermoso de nuestras vidas y queremos compartirlo con ustedes."
+        </p>
+
+    </div>
+
+</section>
+
+</section>
+
+        <!-- PADRES -->
+        <section class="bloque animar-scroll">
+            <h2>Con la bendición de nuestros padres</h2>
+            <div class="cuadro-padres">
+                <div class="columna-padres">
+                    <h3>Padres de la Novia</h3>
+                    <p>Alejandro Silva M.</p>
+                    <p>Elena Rostova de Silva</p>
+                </div>
+                <div class="columna-padres" style="margin-top: 35px;">
+                    <h3>Padres del Novio</h3>
+                    <p>Carlos Mendoza G.</p>
+                    <p>Sofía Alarcón de Mendoza</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALERÍA SECUNDARIA -->
+        <section class="bloque animar-scroll">
+            <div class="galeria-vertical">
+                <img src="img/casados2.png" alt="Instante 1">
+                <img src="img/casados3.png" alt="Instante 2">
+            </div>
+        </section>
+
+        <!-- CEREMONIA -->
+        <section class="bloque animar-scroll">
+            <i class="fa-solid fa-church icono-dorado"></i>
+            <h2>Ceremonia</h2>
+            <p class="mensaje-elegante2" style="font-size: 1.4rem; font-style: normal; font-weight: 500; margin-top: 5px;">Parroquia de Santa María</p>
+            <p style="margin-top: 8px; color: #333; font-weight: 500; letter-spacing: 1px;">Av. de la Paz #123, Zona Centro</p>
+            <p style="font-weight: 600; margin-top: 6px; letter-spacing: 2px; color: var(--color-primario);">16:00 HRS</p>
+            <button class="btn-elegante" onclick="abrirMapa('https://maps.google.com/maps?q=Parroquia%20Santa%20Maria&t=&z=13&ie=UTF8&iwloc=&output=embed')">Ver Mapas</button>
+        </section>
+
+        <!-- RECEPCIÓN -->
+        <section class="bloque animar-scroll">
+            <i class="fa-solid fa-champagne-glasses icono-dorado"></i>
+            <h2>Recepción</h2>
+            <p class="mensaje-elegante2" style="font-size: 1.4rem; font-style: normal; font-weight: 500; margin-top: 5px;">Jardín de Eventos Los Ambrosios</p>
+            <p style="margin-top: 8px; color: #333; font-weight: 500; letter-spacing: 1px;">Camino Real Ext. 45, Las Lomas</p>
+            <p style="font-weight: 600; margin-top: 6px; letter-spacing: 2px; color: var(--color-primario);">18:30 HRS</p>
+            <button class="btn-elegante" onclick="abrirMapa('https://maps.google.com/maps?q=Jardin%20Eventos&t=&z=13&ie=UTF8&iwloc=&output=embed')">Ver Mapas</button>
+        </section>
+
+        <!-- MODAL MAPA -->
+        <div id="modal-mapa" class="modal-mapa" onclick="cerrarMapa()">
+            <div class="modal-contenido" onclick="event.stopPropagation()">
+                <button class="btn-cerrar" onclick="cerrarMapa()">×</button>
+                <iframe id="iframe-mapa" src="" width="100%" height="365" style="border:0; border-radius: 0px;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+
+        <!-- ITINERARIO -->
+        <section class="bloque animar-scroll">
+
+    <div class="cuadro-itinerario">
+
+        <h2 style="color:white;">Itinerario</h2>
+
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="timeline-dot"><i class="fa-solid fa-church"></i></div>
+                <div class="timeline-hora" style="color:#d9e7ff;">16:00 HRS</div>
+                <div class="timeline-titulo" style="color:white;">Ceremonia</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"><i class="fa-solid fa-pen-nib"></i></div>
+                <div class="timeline-hora" style="color:#d9e7ff;">17:30 HRS</div>
+                <div class="timeline-titulo" style="color:white;">Civil</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"><i class="fa-solid fa-champagne-glasses"></i></div>
+                <div class="timeline-hora" style="color:#d9e7ff;">18:30 HRS</div>
+                <div class="timeline-titulo" style="color:white;">Recepción</div>
+            </div>
+
+            <div class="timeline-item" style="margin-bottom:0;">
+                <div class="timeline-dot"><i class="fa-solid fa-music"></i></div>
+                <div class="timeline-hora" style="color:#d9e7ff;">20:00 HRS</div>
+                <div class="timeline-titulo" style="color:white;">Fiesta</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+        <!-- REGALOS -->
+        <section class="bloque animar-scroll">
+            <i class="fa-solid fa-gift icono-dorado"></i>
+            <h2>Mesa de Regalos</h2>
+            <p class="mensaje-elegante2" style="margin-bottom: 20px;">
+                "Con su presencia está bien, pero si gusta dejar un regalo es bienvenido."
+            </p>
+            <a href="https://mesaderegalos.liverpool.com.mx/" target="_blank" class="btn-elegante">Mesa de Regalos Liverpool</a>
+            
+            <div class="datos-banco">
+               
+                <p class="cuenta-num">Banco: BBVA<br>Cuenta: 0000 0000 0000 0000 00<br>A nombre de los Novios</p>
+            </div>
+        </section>
+
+        <!-- RSVP -->
+        <section class="bloque animar-scroll">
+    <i class="fa-solid fa-envelope-open-text icono-dorado"></i>
+    <h2>Confirmar Asistencia</h2>
+    <form class="formulario-rsvp" onsubmit="enviarRespuesta(event)">
+        <div class="form-group">
+            <label>Nombre del Invitado</label>
+            <input type="text" id="nombrePrincipal" class="form-control" required placeholder="Tu nombre completo">
+        </div>
+        <div class="form-group">
+            <label>Persona Extra 1</label>
+            <div class="fila-invitados">
+                <input type="text" id="extra1_nombre" class="form-control" placeholder="Nombre completo">
+                <select id="extra1_relacion" class="form-control">
+                    <option value="">-- Relación --</option>
+                    <option value="familiar">Familiar</option>
+                    <option value="amigo">Amigo</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Persona Extra 2</label>
+            <div class="fila-invitados">
+                <input type="text" id="extra2_nombre" class="form-control" placeholder="Nombre completo">
+                <select id="extra2_relacion" class="form-control">
+                    <option value="">-- Relación --</option>
+                    <option value="familiar">Familiar</option>
+                    <option value="amigo">Amigo</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn-elegante" style="width: 100%; margin-top: 10px;">Enviar Confirmación</button>
+    </form>
+</section>
+
+        <!-- VESTUARIO -->
+        <section class="bloque animar-scroll">
+            <i class="fa-solid fa-user-tie icono-dorado"></i>
+            <h2>Código de Vestimenta</h2>
+            <p class="tipo-vestimenta">Formal</p>
+            
+            <!-- NUEVA PALETA DE COLORES INTERACTIVA 3D -->
+            <div class="contenedor-paleta">
+                <div class="item-color">
+                    <div class="circulo-3d" style="background-color: #0F2042;"></div>
+                    <span class="nombre-color">Azul Marino</span>
+                </div>
+                <div class="item-color">
+                    <div class="circulo-3d" style="background-color: #5A6B7C;"></div>
+                    <span class="nombre-color">Azul Slate</span>
+                </div>
+                <div class="item-color">
+                    <div class="circulo-3d" style="background-color: #D2C4B4;"></div>
+                    <span class="nombre-color">Arena</span>
+                </div>
+                <div class="item-color">
+                    <div class="circulo-3d" style="background-color: #F8F9FA;"></div>
+                    <span class="nombre-color">Blanco</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CIERRE -->
+        <section class="bloque animar-scroll" style="padding-top: 40px; padding-bottom: 60px;">
+            <i class="fa-solid fa-heart icono-dorado" style="font-size: 1.6rem;"></i>
+            <h2 style="font-size: clamp(2.5rem, 6vw, 3.8rem); font-style: italic; color: var(--color-primario);">¡Gracias por Acompañarnos!</h2>
+            <p class="mensaje-elegante2" style="margin-top: 15px;">
+                Su amor y buenos deseos son nuestro mejor regalo en el inicio de esta nueva etapa.
+            </p>
+        </section>
+
+    </div>
+
+    <script>
+        // --- ANIMACIONES SCROLL ---
+        document.addEventListener("DOMContentLoaded", function() {
+            const elementosAAnimar = document.querySelectorAll('.animar-scroll');
+            
+            const opciones = {
+                root: null,
+                threshold: 0.1, 
+                rootMargin: "0px 0px -20px 0px"
+            };
+
+            const observador = new IntersectionObserver((entradas, observador) => {
+                entradas.forEach(entrada => {
+                    if (entrada.isIntersecting) {
+                        entrada.target.classList.add('visible');
+                        observador.unobserve(entrada.target);
+                    }
+                });
+            }, opciones);
+
+            elementosAAnimar.forEach(elemento => {
+                observador.observe(elemento);
+            });
+        });
+
+        // --- SISTEMA REPRODUCTOR BUCLE SUAVE ---
+        const vid1 = document.getElementById('vid1');
+        const vid2 = document.getElementById('vid2');
+        let videoActivo = vid1;
+
+        function inicializarBucleSuave() {
+            setInterval(() => {
+                const tiempoRestante = videoActivo.duration - videoActivo.currentTime;
+                if (tiempoRestante <= 1.2) {
+                    if (videoActivo === vid1 && vid2.paused) {
+                        vid2.currentTime = 0;
+                        vid2.play();
+                        vid2.classList.add('visible');
+                        vid1.classList.remove('visible');
+                        videoActivo = vid2;
+                    } else if (videoActivo === vid2 && vid1.paused) {
+                        vid1.currentTime = 0;
+                        vid1.play();
+                        vid1.classList.add('visible');
+                        vid2.classList.remove('visible');
+                        videoActivo = vid1;
+                    }
+                }
+            }, 100);
+        }
+
+        function abrirSobre() {
+            var sobreContenedor = document.getElementById('bloque-sobre');
+            var pantallaBlanca = document.getElementById('pantalla-blanca');
+            var panelVideos = document.getElementById('reproductor-fondo');
+            var invitacion = document.getElementById('resto-pagina');
+            var musica = document.getElementById('musica-boda');
+            
+            pantallaBlanca.style.opacity = '1';
+            
+            setTimeout(function() {
+                sobreContenedor.remove();         
+                panelVideos.style.display = 'block'; 
+                invitacion.style.display = 'block'; 
+                
+                invitacion.querySelector('.bloque').classList.add('visible');
+                invitacion.style.opacity = '1';     
+                
+                vid1.play();
+                inicializarBucleSuave();
+                
+                pantallaBlanca.style.opacity = '0';
+            }, 600); 
+
+            setTimeout(function() {
+                pantallaBlanca.remove();
+            }, 1200);
+            
+            if(musica) {
+                musica.volume = 0.5;
+                musica.play().catch(function(e) { console.log("Audio listo."); });
+                document.getElementById('icono-musica').classList.replace('fa-music', 'fa-pause');
+            }
+        }
+
+        function controlarMusica() {
+            var musica = document.getElementById('musica-boda');
+            var icono = document.getElementById('icono-musica');
+            if (musica.paused) {
+                musica.play();
+                icono.classList.replace('fa-music', 'fa-pause');
+            } else {
+                musica.pause();
+                icono.classList.replace('fa-pause', 'fa-music');
+            }
+        }
+
+        // --- CUENTA REGRESIVA ---
+        const fechaBoda = new Date("Oct 24, 2026 16:00:00").getTime();
+
+        setInterval(function() {
+            const ahora = new Date().getTime();
+            const distancia = fechaBoda - ahora;
+
+            const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+            if (document.getElementById("dias")) {
+                document.getElementById("dias").innerHTML = dias < 10 ? "0" + dias : dias;
+                document.getElementById("horas").innerHTML = horas < 10 ? "0" + horas : horas;
+                document.getElementById("minutos").innerHTML = minutos < 10 ? "0" + minutos : minutos;
+                document.getElementById("segundos").innerHTML = segundos < 10 ? "0" + segundos : segundos;
+            }
+        }, 1000);
+
+        function abrirMapa(urlMapa) {
+            document.getElementById('iframe-mapa').src = urlMapa;
+            document.getElementById('modal-mapa').classList.add('activo');
+        }
+
+        function cerrarMapa() {
+            document.getElementById('modal-mapa').classList.remove('activo');
+            document.getElementById('iframe-mapa').src = "";
+        }
+
+        function enviarRespuesta(event) {
+            event.preventDefault();
+            alert("¡Confirmación recibida de manera elegante!");
+        }
+        
+        function enviarRespuesta(event) {
+    event.preventDefault(); // Evita que la página se recargue
+
+    // Cambiar texto del botón para feedback visual
+    const boton = event.target.querySelector('button');
+    const textoOriginal = boton.innerText;
+    boton.innerText = "Enviando...";
+    boton.disabled = true;
+
+    // REEMPLAZA ESTA URL por la que copiaste en el Paso 2 (Nueva Implementación)
+   const urlGoogleScript = "https://script.google.com/macros/s/AKfycbxE-9Pa9hoaLcptia4jtfrfx5YIJ5CZXiIfAUKSxGiC_2ZcNuH3IBNmigyw3QGsRyQ/exec";
+    // Recolectamos los datos ordenadamente desde el HTML
+    const datosFormulario = {
+        nombrePrincipal: document.getElementById('nombrePrincipal').value,
+        extra1_nombre: document.getElementById('extra1_nombre').value || "Ninguno",
+        extra1_relacion: document.getElementById('extra1_relacion').value || "N/A",
+        extra2_nombre: document.getElementById('extra2_nombre').value || "Ninguno",
+        extra2_relacion: document.getElementById('extra2_relacion').value || "N/A"
+    };
+
+    // Envío de datos mediante Fetch API de forma asíncrona
+    fetch(urlGoogleScript, {
+        method: 'POST',
+        mode: 'no-cors', // Evita problemas de CORS comunes entre dominios distintos
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datosFormulario)
+    })
+    .then(() => {
+        alert("¡Muchas gracias! Tu asistencia ha sido registrada.");
+        event.target.reset(); // Limpia el formulario
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("Hubo un problema al enviar tu respuesta. Por favor intenta de nuevo.");
+    })
+    .finally(() => {
+        // Restaurar botón
+        boton.innerText = textoOriginal;
+        boton.disabled = false;
+    });
+}
+
+
+
+
+
+    </script>
+</body>
+</html>
